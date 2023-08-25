@@ -1,14 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { usePosts } from "../../store/usePosts";
 
 export default function Post({ postText, creator, publishTime, postID }) {
   const [editedText, setEditedText] = useState(postText);
   const [editBool, setEditBool] = useState(false);
-  const { editPost, posts } = usePosts();
-
-  useEffect(() => {
-    console.log(posts);
-  }, [posts]);
+  const { editPost, deletePost } = usePosts();
 
   const editText = (e) => {
     setEditedText(e.target.value);
@@ -16,11 +12,14 @@ export default function Post({ postText, creator, publishTime, postID }) {
 
   const changeEditBool = () => {
     if (editBool == true) {
-      console.log(editedText);
       editPost(postID, editedText);
     }
     setEditBool(!editBool);
   };
+
+  const deletePostHandle = () => {
+    deletePost(postID)
+  }
 
   return (
     <div>
@@ -30,7 +29,7 @@ export default function Post({ postText, creator, publishTime, postID }) {
       <button disabled={!editedText} onClick={changeEditBool}>
         {editBool ? "Save" : "Edit"}
       </button>
-      <button>Delete</button>
+      <button onClick={deletePostHandle}>Delete</button>
     </div>
   );
 }
